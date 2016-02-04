@@ -564,3 +564,14 @@
 (deftest test-issue-90
   (is (= (html-vec [:div nil (case :a :a "a")])
          [:div {} "a"])))
+
+(deftest test-issue-57
+  (let [payload {:username "john" :likes 2}]
+    (is (= (html-vec
+            (let [{:keys [username likes]} payload]
+              [:div
+               [:div (str username " (" likes ")")]
+               [:div "!Pixel Scout"]]))
+           [:div {}
+            [:div {} "john (2)"]
+            [:div {} "!Pixel Scout"]]))))
