@@ -534,6 +534,17 @@
   (is (= (html-vec [:div.a {:class #{"a" "b" "c"}}])
          [:div {:class "a b c"}])))
 
+
+(deftest test-class-duplication
+  (is (= (html-vec [:div.a.a.b.b.c {:class "c"}])
+         [:div {:class "a b c"}]))  )
+
+(deftest test-class-order
+  (is (= (html-vec [:div.a.b.c {:class "d"}])
+         [:div {:class "a b c d"}]))
+  (is (= (html-vec [:div.a.b.c {:class ["foo" "bar"]}])
+         [:div {:class "a b c foo bar"}])))
+
 (deftest test-issue-80
   (is (= (html-vec
           [:div
@@ -564,3 +575,7 @@
 (deftest test-issue-90
   (is (= (html-vec [:div nil (case :a :a "a")])
          [:div {} "a"])))
+
+(deftest test-complex-scenario
+  (is (= (html-vec [:div.a {:class (list "b")} (case :a :a "a")])
+         [:div {:class "a b"} "a"])))
